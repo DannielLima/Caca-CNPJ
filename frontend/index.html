@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consulta CNPJ</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            font-size: 24px;
+            text-align: center;
+            color: #333;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .error {
+            color: red;
+            text-align: center;
+        }
+
+        .result {
+            margin-top: 20px;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Consulta CNPJ</h1>
+        <input type="text" id="cnpj" placeholder="Digite o CNPJ">
+        <button onclick="consultarCNPJ()">Consultar</button>
+        <div id="error" class="error"></div>
+        <div id="result" class="result"></div>
+    </div>
+
+    <script>
+        function consultarCNPJ() {
+            const cnpj = document.getElementById('cnpj').value.trim();
+            const errorDiv = document.getElementById('error');
+            const resultDiv = document.getElementById('result');
+
+            // Limpar mensagens anteriores
+            errorDiv.textContent = '';
+            resultDiv.textContent = '';
+
+            if (!cnpj || cnpj.length !== 14 || isNaN(cnpj)) {
+                errorDiv.textContent = 'Por favor, insira um CNPJ válido com 14 dígitos.';
+                return;
+            }
+
+            // Fazer a requisição para a API FastAPI
+            fetch(`http://127.0.0.1:8000/cnpj/${cnpj}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        errorDiv.textContent = 'Erro ao buscar o CNPJ. Verifique o número.';
+                    } else {
+                        resultDiv.textContent = JSON.stringify(data, null, 2);
+                    }
+                })
+                .catch(error => {
+                    errorDiv.textContent = 'Erro ao consultar o CNPJ.';
+                });
+        }
+    </script>
+</body>
+</html>
