@@ -1,106 +1,52 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Consulta CNPJ</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f9;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Consulta de CNPJ</title>
+    <link href="output.css" rel="stylesheet" />
+  </head>
+  <body class="bg-gray-100">
+    <div class="container mx-auto p-8">
+      <h1 class="text-4xl font-bold text-center mb-8">Consulta de CNPJ</h1>
+      <div class="bg-white shadow-md rounded-lg p-6">
+        <h2 class="text-2xl font-semibold mb-4">Dados da Empresa</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div><strong>Nome Fantasia:</strong> {{ nome_fantasia }}</div>
+          <div>
+            <strong>CNPJ:</strong> {{ cnpj_raiz }}-{{ cnpj_ordem }}/{{
+            cnpj_digito_verificador }}
+          </div>
+          <div>
+            <strong>Situação Cadastral:</strong> {{ situacao_cadastral }}
+          </div>
+          <div>
+            <strong>Data de Início de Atividade:</strong> {{
+            data_inicio_atividade }}
+          </div>
+          <div>
+            <strong>Endereço:</strong> {{ tipo_logradouro }} {{ logradouro }},
+            {{ numero }}, {{ complemento }}, {{ bairro }}
+          </div>
+          <div><strong>CEP:</strong> {{ cep }}</div>
+          <div><strong>Telefone:</strong> ({{ ddd1 }}) {{ telefone1 }}</div>
+          <div><strong>Email:</strong> {{ email }}</div>
+        </div>
 
-        .container {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
+        <h2 class="text-2xl font-semibold mt-8 mb-4">Atividade Principal</h2>
+        <div>
+          <strong>Descrição:</strong> {{ atividade_principal.descricao }}
+        </div>
 
-        h1 {
-            font-size: 24px;
-            text-align: center;
-            color: #333;
-        }
-
-        input[type="text"] {
-            width: 100%;
-            padding: 10px;
-            margin-top: 10px;
-            margin-bottom: 20px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-
-        button {
-            width: 100%;
-            padding: 10px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        button:hover {
-            background-color: #0056b3;
-        }
-
-        .error {
-            color: red;
-            text-align: center;
-        }
-
-        .result {
-            margin-top: 20px;
-            white-space: pre-wrap;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h1>Consulta CNPJ</h1>
-        <input type="text" id="cnpj" placeholder="Digite o CNPJ">
-        <button onclick="consultarCNPJ()">Consultar</button>
-        <div id="error" class="error"></div>
-        <div id="result" class="result"></div>
+        <h2 class="text-2xl font-semibold mt-8 mb-4">Atividades Secundárias</h2>
+        <ul>
+          {% for atividade in atividades_secundarias %}
+          <li class="mb-2">
+            <strong>{{ atividade.descricao }}</strong>
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
     </div>
-
-    <script>
-        function consultarCNPJ() {
-            const cnpj = document.getElementById('cnpj').value.trim();
-            const errorDiv = document.getElementById('error');
-            const resultDiv = document.getElementById('result');
-
-            // Limpar mensagens anteriores
-            errorDiv.textContent = '';
-            resultDiv.textContent = '';
-
-            if (!cnpj || cnpj.length !== 14 || isNaN(cnpj)) {
-                errorDiv.textContent = 'Por favor, insira um CNPJ válido com 14 dígitos.';
-                return;
-            }
-
-            // Fazer a requisição para a API FastAPI
-            fetch(`http://127.0.0.1:8000/cnpj/${cnpj}`)
-                .then(response => response.json())
-                .then(data => {
-                    if (data.error) {
-                        errorDiv.textContent = 'Erro ao buscar o CNPJ. Verifique o número.';
-                    } else {
-                        resultDiv.textContent = JSON.stringify(data, null, 2);
-                    }
-                })
-                .catch(error => {
-                    errorDiv.textContent = 'Erro ao consultar o CNPJ.';
-                });
-        }
-    </script>
-</body>
+  </body>
 </html>
