@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Consulta de CNPJ</title>
-    <link href="/static/output.css" rel="stylesheet" />
+    <link href="/" rel="stylesheet" />
   </head>
   <body class="bg-gray-100">
     <div class="container mx-auto p-8">
@@ -50,9 +50,11 @@
             data_inicio_atividade }}
           </div>
           <div>
-            <strong>Endereço:</strong> {{ tipo_logradouro }} {{ logradouro }},
-            {{ numero }}, {{ bairro }} - {{ cidade.nome }}, {{ estado.sigla }},
-            {{ pais.nome }}
+            <strong>Endereço:</strong> {{ tipo_logradouro or 'N/A' }} {{
+            logradouro or 'N/A' }}, {{ numero or 'N/A' }}, {{ bairro or 'N/A' }}
+            - {{ cidade.nome if cidade else 'Cidade Indefinida' }}, {{
+            estado.sigla if estado else 'Estado Indefinido' }}, {{ pais.nome or
+            'País Indefinido' }}
           </div>
           <div><strong>CEP:</strong> {{ cep }}</div>
           <div><strong>Telefone:</strong> ({{ ddd1 }}) {{ telefone1 }}</div>
