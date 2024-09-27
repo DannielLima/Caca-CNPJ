@@ -1,16 +1,17 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 
 setup(
-    name='CacaCNPJ',
-    version='1.0',
-    py_modules=['consulta_cnpj'],
+    name='cacacnpj',
+    version='0.1',
+    packages=find_packages(),
     install_requires=[
         'requests',
         'rich',
         'click',
     ],
-    entry_points='''
-        [console_scripts]
-        cacacnpj=consulta_cnpj:main
-    ''',
+    entry_points={
+        'console_scripts': [
+            'cacacnpj=backend.consulta_cnpj:main',
+        ],
+    },
 )
